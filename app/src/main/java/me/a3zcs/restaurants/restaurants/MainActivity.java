@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<String> images) {
             super.onPostExecute(images);
-            //TODO STOP PROGRESS BAR, PRINT OUR IMAGE URLS ON LOG
+            //TODO STOP PROGRESS BAR
 
             for (int i = 0; i < images.size(); i++)
                 Log.i("My List", images.get(i));
