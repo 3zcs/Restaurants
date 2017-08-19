@@ -4,8 +4,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             //TODO START PROGRESS BAR
+            mProgressBar.setVisibility(View.VISIBLE);
 
         }
 
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         protected List<String> doInBackground(String... strings) {
             List<String> imageList = new ArrayList<>();
             HttpURLConnection connection = null;
+
             try {
 
                 URL url = new URL(strings[0]);
@@ -66,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.i("result", builder.toString());
                 JSONObject topLevel = new JSONObject(builder.toString());
-                //TODO FILL imageList WITH URLs
+                JSONArray restaurantArray = topLevel.getJSONArray("restaurant");
+                for (int i = 0; i < restaurantArray.length(); i++) {
+                    JSONObject object = restaurantArray.getJSONObject(i);
+                    //TODO FILL imageList WITH URLs
+                    imageList.add(object.getString("logo"));
+                }
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(List<String> images) {
             super.onPostExecute(images);
             //TODO STOP PROGRESS BAR
+            mProgressBar.setVisibility(View.GONE);
 
             for (int i = 0; i < images.size(); i++)
                 Log.i("My List", images.get(i));
